@@ -16,5 +16,4 @@ class SharedPref constructor(context: Context) {
         private const val NAME = "ListApp"
         private const val MODE = Context.MODE_PRIVATE
     }
-
 }
