@@ -8,7 +8,7 @@ import com.software.listapp.domain.main.product.ProductEntity
     entities = [
         ProductEntity::class,
         ProductAttributesEntity::class
-    ], version = 1, exportSchema = true
+    ], version = 2, exportSchema = true
 )
 abstract class RoomDatabase: androidx.room.RoomDatabase() {
 

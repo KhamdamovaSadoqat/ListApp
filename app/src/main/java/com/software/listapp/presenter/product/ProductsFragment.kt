@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.software.listapp.data.comman.base.BindingFragment
 import com.software.listapp.databinding.FragmentProductsBinding
@@ -26,8 +27,9 @@ class ProductsFragment : BindingFragment<FragmentProductsBinding>() {
     }
 
     private fun setUp() {
-        adapter = ProductAdapter {
-
+        adapter = ProductAdapter { productId ->
+            val action = ProductsFragmentDirections.actionProductFragmentToProductDetailsFragment(productId)
+            findNavController().navigate(action)
         }
         binding.rvProducts.adapter = adapter
         viewModel.product()

@@ -7,6 +7,8 @@ import androidx.navigation.fragment.NavHostFragment
 import com.software.listapp.R
 import com.software.listapp.database.RoomDatabase
 import com.software.listapp.databinding.ActivityMainBinding
+import com.software.listapp.utils.Connection
+import com.software.listapp.utils.showToast
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -17,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     lateinit var roomDatabase: RoomDatabase
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private var backPressedTime: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,9 +32,12 @@ class MainActivity : AppCompatActivity() {
         val graph = inflater.inflate(R.navigation.mobile_navigation)
         graph.setStartDestination(R.id.productFragment)
         navController.graph = graph
+
+        val connectionLiveData = Connection(this)
+        connectionLiveData.observe(this) { isNetworkAvailable ->
+            isNetworkAvailable?.let { if (!it) this.showToast("Internet unavailable!") }
+        }
     }
 
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
+
 }

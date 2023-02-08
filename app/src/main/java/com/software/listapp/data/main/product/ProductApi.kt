@@ -9,5 +9,5 @@ interface ProductApi {
     @GET
     suspend fun product(
         @Url url: String = "offers"
-    ): Response<List<ProductResponse>>
+    ): Response<OfferResponse>
 }

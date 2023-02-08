@@ -3,7 +3,7 @@ package com.software.listapp.presenter.product
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.software.listapp.data.comman.base.BindingViewModel
-import com.software.listapp.data.main.product.ProductResponse
+import com.software.listapp.data.main.product.OfferResponse
 import com.software.listapp.database.ProductDao
 import com.software.listapp.domain.base.BaseResultList
 import com.software.listapp.domain.main.product.ProductAttributesEntity
@@ -59,7 +59,7 @@ class ProductsViewModel @Inject constructor(
     private fun insertProduct(productEntity: ProductEntity) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                productDao.insertProduct(productEntity)
+                productUseCase.insertProduct(productEntity)
             }
         }
     }
@@ -67,13 +67,21 @@ class ProductsViewModel @Inject constructor(
     private fun insertProductAttributes(productAttributesEntity: ProductAttributesEntity) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                productDao.insertProductAttributes(productAttributesEntity)
+                productUseCase.insertProductAttributes(productAttributesEntity)
             }
         }
     }
 
     fun getAllProducts():LiveData<List<ProductEntity>>{
         return productDao.getAllProducts()
+    }
+
+    fun getProduct(id: Int): LiveData<ProductEntity>{
+        return productDao.getProduct(id)
+    }
+
+    fun getProductAttributes(productId: Int): LiveData<List<ProductAttributesEntity>>{
+        return productDao.getProductAttributes(productId)
     }
 }
 
@@ -82,6 +90,5 @@ sealed class ProductState {
     data class IsLoading(val isLoading: Boolean) : ProductState()
     data class ShowToast(val message: String) : ProductState()
     data class Success(val university: String) : ProductState()
-    data class Error(val rawResponse: List<ProductResponse>) :
-        ProductState()
+    data class Error(val rawResponse: OfferResponse) : ProductState()
 }

@@ -1,14 +1,13 @@
 package com.software.listapp.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 
 
+@Suppress("DEPRECATION")
 class NetworkHelper constructor(private val context: Context) {
-    @SuppressLint("MissingPermission")
     fun isConnected(): Boolean {
         var result = false
         val connectivityManager =

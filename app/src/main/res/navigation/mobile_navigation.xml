@@ -9,6 +9,24 @@
         android:id="@+id/productFragment"
         android:name="com.software.listapp.presenter.product.ProductsFragment"
         android:label="fragment_introduction"
-        tools:layout="@layout/fragment_products" />
+        tools:layout="@layout/fragment_products" >
+        <action
+            android:id="@+id/action_productFragment_to_productDetailsFragment"
+            app:destination="@id/productDetailsFragment" >
+            <argument
+                android:name="productId"
+                app:argType="integer" />
+        </action>
+    </fragment>
 
+    <fragment
+        android:id="@+id/productDetailsFragment"
+        android:name="com.software.listapp.presenter.productDetails.ProductDetailsFragment"
+        android:label="fragment_product_details"
+        tools:layout="@layout/fragment_product_details" >
+        <argument
+            android:name="productId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
+    </fragment>
 </navigation>

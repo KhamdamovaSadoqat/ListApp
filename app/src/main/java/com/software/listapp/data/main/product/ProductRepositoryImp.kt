@@ -15,41 +15,43 @@ class ProductRepositoryImp @Inject constructor(
     private val productApi: ProductApi,
     private val productDao: ProductDao
 ):ProductRepository {
-    override suspend fun product(): Flow<BaseResultList<List<ProductEntity>, List<ProductAttributesEntity>, List<ProductResponse>>> {
+    override suspend fun product(): Flow<BaseResultList<List<ProductEntity>, List<ProductAttributesEntity>, OfferResponse>> {
         val response = productApi.product()
         return flow {
             if (response.isSuccessful && response.body() != null) {
                 val body = response.body()!!
                 val listProduct = arrayListOf<ProductEntity>()
                 val listProductAttributes = arrayListOf<ProductAttributesEntity>()
-                body.forEach{ product ->
-                    val productEntity = ProductEntity(
-                        product.name?: "",
-                        product.image?.width?: "",
-                        product.image?.height?: "",
-                        product.image?.url?: "",
-                        product.merchant?: "",
-                        product.category?: "",
-                        product.brand?: "",
-                        product.id?: -1
-                    )
-                    listProduct.add(productEntity)
-
-                    product.attributes?.forEach { attr ->
-                        val attributesEntity = ProductAttributesEntity(
-                            product.id?: -1,
-                            attr?.name?: "",
-                            attr?.value?: "",
-                            "${product.id?: -1}${attr?.name?: ""}"
+                if(body.offers != null) {
+                    body.offers.forEach{ product ->
+                        val productEntity = ProductEntity(
+                            product?.name ?: "",
+                            product?.image?.width?: "",
+                            product?.image?.height?: "",
+                            product?.image?.url?: "",
+                            product?.merchant?: "",
+                            product?.category?: "",
+                            product?.brand?: "",
+                            product?.id?: -1
                         )
-                        listProductAttributes.add(attributesEntity)
-                    }
+                        listProduct.add(productEntity)
 
+                        product?.attributes?.forEach { attr ->
+                            val attributesEntity = ProductAttributesEntity(
+                                product.id?: -1,
+                                attr?.name?: "",
+                                attr?.value?: "",
+                                "${product.id?: -1}${attr?.name?: ""}"
+                            )
+                            listProductAttributes.add(attributesEntity)
+                        }
+                    }
                 }
+
                 emit(BaseResultList.Success(listProduct, listProductAttributes))
             } else {
-                val type = object : TypeToken<List<ProductResponse>>() {}.type
-                val err: List<ProductResponse> =
+                val type = object : TypeToken<OfferResponse>() {}.type
+                val err: OfferResponse =
                     Gson().fromJson(response.errorBody()!!.charStream(), type)
                 //here should be handled error messages but i don't know they look :(
                 emit(BaseResultList.Error(err))

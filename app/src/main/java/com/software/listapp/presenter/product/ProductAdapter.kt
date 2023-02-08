@@ -9,7 +9,7 @@ import com.software.listapp.utils.AutoUpdatableAdapter
 import com.software.listapp.utils.ImageDownloader
 import kotlin.properties.Delegates
 
-class ProductAdapter (private val itemClickListener: (ProductEntity) -> Unit) :
+class ProductAdapter (private val itemClickListener: (Int) -> Unit) :
     RecyclerView.Adapter<ProductAdapter.VH>(),
     AutoUpdatableAdapter {
 
@@ -23,7 +23,7 @@ class ProductAdapter (private val itemClickListener: (ProductEntity) -> Unit) :
     override fun onBindViewHolder(holder: VH, position: Int) {
         holder.onBind(items[position])
         holder.itemView.setOnClickListener {
-            itemClickListener.invoke(items[position])
+            itemClickListener.invoke(items[position].id)
         }
     }
 
